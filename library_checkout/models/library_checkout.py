@@ -34,14 +34,20 @@ class Checkout(models.Model):
     num_books = fields.Integer(
         compute="_compute_num_books",
         store=True
-        )
+    )
     kanban_state = fields.Selection(
         [("normal", "In Progress"),
          ("blocked", "Blocked"),
          ("done", "Ready for next stage")],
         "Kanban State",
         default="normal")
-    
+    color = fields.Integer()
+    priority = fields.Selection(
+        [("0", "High"),
+         ("1", "Very High"),
+         ("2", "Critical")],
+        default="0")
+
     # def _compute_count_checkouts(self):
     #     for checkout in self:
     #         domain = [
@@ -49,6 +55,7 @@ class Checkout(models.Model):
     #             ("state", "not in", ["done", "cancel"]),
     #         ]
     #         checkout.count_checkouts = self.search_count(domain)
+
     def _compute_count_checkouts(self):
         members = self.mapped("member_id")
         domain = [
@@ -62,7 +69,7 @@ class Checkout(models.Model):
         for checkout in self:
             checkout.count_checkouts = data.get(
                 checkout.member_id.id, 0)
-    
+
     @api.depends("line_ids")
     def _compute_num_books(self):
         for book in self:
@@ -148,11 +155,11 @@ class Checkout(models.Model):
                 self.with_context(_checkout_write=True).write(
                     {"close_date": fields.Date.today()})
         return True
-    
+
     def button_done(self):
         Stage = self.env["library.checkout.stage"]
-        done_stage = Stage.search([("state", "=", "done")], 
-          limit=1)
+        done_stage = Stage.search([("state", "=", "done")],
+                                  limit=1)
         for checkout in self:
             checkout.stage_id = done_stage
         return True

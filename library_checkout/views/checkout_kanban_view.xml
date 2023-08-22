@@ -6,6 +6,8 @@
 			<kanban default_group_by="stage_id">
 				<!-- Field list to ensure is loaded ... -->
 				<field name="state" />
+				<field name="color" />
+				<field name="num_books" />
 				<progressbar field="kanban_state"
 					colors='{
 					"done": "success",
@@ -15,7 +17,10 @@
 				/>
 				<templates>
 					<t t-name="kanban-box">
-						<div class="oe_kanban_global_click">
+						<div
+							t-attf-class="oe_kanban_global_click
+							{{!selection_mode ? 'oe_kanban_color_' +
+								kanban_getcolor(record.color.raw_value) : ''}}">
 							<div class="o_dropdown_kanban dropdown">
 								<!-- Top-right drop down menu ... -->
 								<a class="dropdown-toggle btn"
@@ -40,7 +45,7 @@
 									<ul class="oe_kanban_colorpicker"
 										data-field="color" />
 									<!-- Set as Done menu option -->
-									<a t-if="record.state.value != 'Borrowed'" 
+									<a t-if="record.state.raw_value != 'done'"
 										role="menuitem" class="dropdown-item"
 										name="button_done" type="object">Set as Done</a>
 								</div>
@@ -48,13 +53,17 @@
 							<div class="oe_kanban_content">
 								<div class="o_kanban_record_title">
 									<!-- Title area ... -->
-									<strong>
+									<t t-set="red_or_black"
+										t-value="record.num_books == 0 ? 'oe_kanban_text_red' : ''"
+									/>
+									<strong t-att-class="red_or_black">
 										<field name="name" />
 									</strong>
 								</div>
 								<div class="o_kanban_record_body">
 									<!-- Other content area  ... -->
-									<div>
+									<div
+										t-attf-class="oe_kanban_text_{{record.priority.raw_value &lt; '2'? 'black' : 'red' }}">
 										<field name="request_date" />
 									</div>
 									<div>
@@ -65,9 +74,20 @@
 								<div class="o_kanban_record_bottom">
 									<div class="oe_kanban_bottom_left">
 										<!-- Left side footer... -->
+										<field name="priority" widget="priority" />
+										<field name="activity_ids"
+											widget="kanban_activity" />
 									</div>
 									<div class="oe_kanban_bottom_right">
 										<!-- Right side footer... -->
+										<field name="kanban_state"
+											widget="state_selection"
+											colors='{
+												"done": "success",
+												"blocked": "danger",
+												"normal": "muted"}' />
+										<field name="user_id"
+											widget="many2one_avatar_user" />
 									</div>
 								</div>
 								<div class="oe_clear" />

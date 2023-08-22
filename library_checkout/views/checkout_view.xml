@@ -81,7 +81,14 @@
           <!-- Notebook -->
           <notebook>
             <page name="page_lines" string="Borrowed Books">
-              <field name="line_ids" />
+              <field name="line_ids">
+                <tree>
+                  <field name="book_id" />
+                </tree>
+                <form>
+                  <field name="book_id" />
+                </form>
+              </field>
             </page>
           </notebook>
         </sheet>
