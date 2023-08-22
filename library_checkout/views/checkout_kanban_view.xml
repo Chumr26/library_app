@@ -4,17 +4,74 @@
 		<field name="model">library.checkout</field>
 		<field name="arch" type="xml">
 			<kanban default_group_by="stage_id">
+				<!-- Field list to ensure is loaded ... -->
+				<field name="state" />
 				<progressbar field="kanban_state"
 					colors='{
 					"done": "success",
 					"blocked": "danger",
 					"normal": "muted"}'
-					sum_fields="num_books"
+					sum_field="num_books"
 				/>
 				<templates>
 					<t t-name="kanban-box">
-						<div>
-							<field name="name" />
+						<div class="oe_kanban_global_click">
+							<div class="o_dropdown_kanban dropdown">
+								<!-- Top-right drop down menu ... -->
+								<a class="dropdown-toggle btn"
+									role="button" data-toggle="dropdown"
+									title="Dropdown menu" href="#">
+									<span class="fa fa-ellipsis-v" />
+								</a>
+								<div class="dropdown-menu" role="menu">
+									<!-- Edit menu option -->
+									<t t-if="widget.editable">
+										<a role="menuitem" type="edit"
+											class="dropdown-item">Edit</a>
+									</t>
+									<!-- Delete menu option -->
+									<t t-if="widget.deletable">
+										<a role="menuitem" type="delete"
+											class="dropdown-item">Delete</a>
+									</t>
+									<!-- Separator line -->
+									<div role="separator" class="dropdown-divider" />
+									<!-- Color picker option: -->
+									<ul class="oe_kanban_colorpicker"
+										data-field="color" />
+									<!-- Set as Done menu option -->
+									<a t-if="record.state.value != 'Borrowed'" 
+										role="menuitem" class="dropdown-item"
+										name="button_done" type="object">Set as Done</a>
+								</div>
+							</div>
+							<div class="oe_kanban_content">
+								<div class="o_kanban_record_title">
+									<!-- Title area ... -->
+									<strong>
+										<field name="name" />
+									</strong>
+								</div>
+								<div class="o_kanban_record_body">
+									<!-- Other content area  ... -->
+									<div>
+										<field name="request_date" />
+									</div>
+									<div>
+										<field name="member_id"
+											widget="many2one_avatar" />
+									</div>
+								</div>
+								<div class="o_kanban_record_bottom">
+									<div class="oe_kanban_bottom_left">
+										<!-- Left side footer... -->
+									</div>
+									<div class="oe_kanban_bottom_right">
+										<!-- Right side footer... -->
+									</div>
+								</div>
+								<div class="oe_clear" />
+							</div>
 						</div>
 					</t>
 				</templates>
