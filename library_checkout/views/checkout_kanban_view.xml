@@ -4,6 +4,13 @@
 		<field name="model">library.checkout</field>
 		<field name="arch" type="xml">
 			<kanban default_group_by="stage_id">
+				<progressbar field="kanban_state"
+					colors='{
+					"done": "success",
+					"blocked": "danger",
+					"normal": "muted"}'
+					sum_fields="num_books"
+				/>
 				<templates>
 					<t t-name="kanban-box">
 						<div>

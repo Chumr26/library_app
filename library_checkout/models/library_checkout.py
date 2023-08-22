@@ -35,6 +35,12 @@ class Checkout(models.Model):
         compute="_compute_num_books",
         store=True
         )
+    kanban_state = fields.Selection(
+        [("normal", "In Progress"),
+         ("blocked", "Blocked"),
+         ("done", "Ready for next stage")],
+        "Kanban State",
+        default="normal")
     
     # def _compute_count_checkouts(self):
     #     for checkout in self:
@@ -149,4 +155,11 @@ class Checkout(models.Model):
           limit=1)
         for checkout in self:
             checkout.stage_id = done_stage
+        return True
+
+    def write(self, vals):
+        # reset kanban state when changing stage
+        if "stage_id" in vals and "kanban_state" not in vals:
+            vals["kanban_state"] = "normal"
+        super().write(vals)
         return True
