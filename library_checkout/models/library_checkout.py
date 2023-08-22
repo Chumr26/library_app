@@ -31,7 +31,10 @@ class Checkout(models.Model):
     checkout_date = fields.Date(readonly=True)
     close_date = fields.Date(readonly=True)
     count_checkouts = fields.Integer(compute="_compute_count_checkouts")
-    num_books = fields.Integer(compute="_compute_num_books")
+    num_books = fields.Integer(
+        compute="_compute_num_books",
+        store=True
+        )
     
     # def _compute_count_checkouts(self):
     #     for checkout in self:

@@ -3,7 +3,7 @@
     model="ir.actions.act_window">
     <field name="name">Checkouts</field>
     <field name="res_model">library.checkout</field>
-    <field name="view_mode">tree,form,activity</field>
+    <field name="view_mode">kanban,tree,form,activity,calendar,pivot,graph</field>
   </record>
   <menuitem id="menu_library_checkout"
     name="Checkout"
