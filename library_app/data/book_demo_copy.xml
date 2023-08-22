@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<odoo>
+    <data noupdate="1">
+    <function
+        model="library.book"
+        name="fun_log_2"
+        eval="['khoa denp']"/>
+    </data>
+</odoo>
