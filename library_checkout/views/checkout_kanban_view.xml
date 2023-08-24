@@ -8,6 +8,7 @@
 				<field name="state" />
 				<field name="color" />
 				<field name="num_books" />
+				<field name="line_ids" />
 				<progressbar field="kanban_state"
 					colors='{
 					"done": "success",
@@ -19,8 +20,7 @@
 					<t t-name="kanban-box">
 						<div
 							t-attf-class="oe_kanban_global_click
-							{{!selection_mode ? 'oe_kanban_color_' +
-								kanban_getcolor(record.color.raw_value) : ''}}">
+							{{!selection_mode ? 'oe_kanban_color_' + kanban_getcolor(record.color.raw_value) : ''}}">
 							<div class="o_dropdown_kanban dropdown">
 								<!-- Top-right drop down menu ... -->
 								<a class="dropdown-toggle btn"
@@ -70,6 +70,9 @@
 										<field name="member_id"
 											widget="many2one_avatar" />
 									</div>
+									<t t-call="book_covers">
+										<t t-set="limit" t-value="3" />
+									</t>
 								</div>
 								<div class="o_kanban_record_bottom">
 									<div class="oe_kanban_bottom_left">
@@ -94,8 +97,32 @@
 							</div>
 						</div>
 					</t>
+					<t t-name="book_covers">
+						<div>
+							<t t-foreach="record.line_ids.raw_value.slice(0, limit)" t-as="rec">
+								<img
+									t-att-src="kanban_image(
+									'library.checkout.line', 'book_cover', rec)"
+									class="oe_avatar" height="60" alt="Cover" />
+							</t>
+						</div>
+					</t>
 				</templates>
 			</kanban>
 		</field>
 	</record>
+	<!-- Kế thừa và chỉnh sửa contact kanban view -->
+	<!-- <record id="res_partner_kanban_inherit" model="ir.ui.view"> 
+		<field name="name">Contact Kanban modification</field> 
+		<field name="model">res.partner</field> 
+		<field name="inherit_id" 
+			ref="base.res_partner_kanban_view" /> 
+		<field name="arch" type="xml"> 
+			<xpath
+			 expr="//t[@t-name='kanban-box']//field[@name='display_name']" 
+			 position="before"> 
+			 <span>Name:</span> 
+			</xpath> 
+		</field> 
+	</record> -->
 </odoo>

@@ -11,3 +11,4 @@ class CheckoutLine(models.Model):
     )
     book_id = fields.Many2one("library.book", required=True)
     note = fields.Char("Notes")
+    book_cover = fields.Binary(related="book_id.image")

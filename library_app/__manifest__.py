@@ -15,6 +15,7 @@
         "views/library_menu.xml",
         "views/book_list_template.xml",
         # "data/book_demo_copy.xml",
+        "reports/library_book_report.xml",
     ],
     "application": True,
     "demo": [
