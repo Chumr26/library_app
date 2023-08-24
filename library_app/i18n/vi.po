@@ -1,0 +1,4 @@
+#. module: library_app
+#: model:ir.model.fields,field_description:library_app.field_library_book__author_ids
+msgid "Authors"
+msgstr "Tác giả"
